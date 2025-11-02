@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coffee Haven ☕</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f5f2;
+      text-align: center;
+      padding: 50px;
+    }
+    .container {
+      background: #fff;
+      border-radius: 15px;
+      padding: 30px;
+      width: 90%;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #6f4e37;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #5a3e2c;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Coffee Haven ☕</h2>
+    <p>Order your favorite coffee below</p>
+    
+    <label for="coffeeType">Select Coffee</label>
+    <select id="coffeeType">
+      <option value="Latte">Latte - Ksh 150</option>
+      <option value="Cappuccino">Cappuccino - Ksh 200</option>
+      <option value="Espresso">Espresso - Ksh 180</option>
+    </select>
+
+    <label for="phone">M-Pesa Phone Number</label>
+    <input type="tel" id="phone" placeholder="e.g. 254720254797" />
+
+    <button onclick="makePayment()">Pay with M-Pesa</button>
+    <p id="response"></p>
+  </div>
+
+  <script>
+    async function makePayment() {
+      const phone = document.getElementById('phone').value;
+      const coffee = document.getElementById('coffeeType').value;
+
+      if (!phone) {
+        alert('Please enter phone number');
+        return;
+      }
+
+      document.getElementById('response').innerText = 'Sending payment request...';
+
+      const res = await fetch('http://localhost:3000/pay', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, coffee })
+      });
+
+      const data = await res.json();
+      document.getElementById('response').innerText = data.message;
+    }
+  </script>
+</body>
+</html>
